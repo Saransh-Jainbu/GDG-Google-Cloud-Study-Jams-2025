@@ -35,13 +35,21 @@ let currentComparator = numericCompareFactory((r) => {
 });
 
 const updateData = async (filter, flag, bustCache = false) => {
-  // Add cache-busting parameter if needed
-  const cacheBuster = bustCache ? `?t=${Date.now()}` : '';
-  let data = await (await fetch(`./data.json${cacheBuster}`)).json();
-  
-  // Get last modified time from data.json
   try {
+    // Add cache-busting parameter if needed
+    const cacheBuster = bustCache ? `?t=${Date.now()}` : '';
+    
+    console.log('Fetching data from:', `./data.json${cacheBuster}`);
     const response = await fetch(`./data.json${cacheBuster}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    let data = await response.json();
+    console.log('Data loaded successfully:', data.length, 'records');
+    
+    // Get last modified time from data.json
     const lastModified = response.headers.get('Last-Modified');
     const lastUpdateEl = document.getElementById('last-update-text');
     
@@ -69,25 +77,25 @@ const updateData = async (filter, flag, bustCache = false) => {
       });
       lastUpdateEl.textContent = `📊 Last updated: ${formattedDate} • Click "Refresh Data" to update now!`;
     }
-  } catch (e) {
-    console.error('Could not fetch last modified time:', e);
-  }
-  
-  if (filter !== "") {
-    data = data.filter((el) => {
-      return el["User Name"] && el["User Name"].toLowerCase().includes(filter.toLowerCase());
-    });
-  }
+    } catch (e) {
+      console.error('Could not fetch last modified time:', e);
+    }
+    
+    if (filter !== "") {
+      data = data.filter((el) => {
+        return el["User Name"] && el["User Name"].toLowerCase().includes(filter.toLowerCase());
+      });
+    }
 
-  data.sort(currentComparator);
+    data.sort(currentComparator);
 
-  // Reset counter each time we render
-  totalCompletionsYesCount = 0;
+    // Reset counter each time we render
+    totalCompletionsYesCount = 0;
 
-  // Reset milestone if previous was achieved
-  if (activeMilestoneIndex < MILESTONES.length - 1 && totalCompletionsYesCount >= MILESTONES[activeMilestoneIndex]) {
-    activeMilestoneIndex++;
-  }
+    // Reset milestone if previous was achieved
+    if (activeMilestoneIndex < MILESTONES.length - 1 && totalCompletionsYesCount >= MILESTONES[activeMilestoneIndex]) {
+      activeMilestoneIndex++;
+    }
 
   let html = "";
 
@@ -158,6 +166,32 @@ const updateData = async (filter, flag, bustCache = false) => {
 
   if (flag) changeWidth();
   document.getElementById("gccp_body").innerHTML = html;
+  
+  } catch (error) {
+    console.error('Error loading data:', error);
+    const tbody = document.getElementById("gccp_body");
+    const lastUpdateEl = document.getElementById('last-update-text');
+    
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="10" class="px-4 py-8 text-center">
+            <div class="text-red-600 font-semibold mb-2">
+              ❌ Failed to load data
+            </div>
+            <div class="text-gray-600 text-sm">
+              Error: ${error.message}<br>
+              Please check browser console for details.
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+    
+    if (lastUpdateEl) {
+      lastUpdateEl.innerHTML = `<span class="text-red-600">❌ Error loading data: ${error.message}</span>`;
+    }
+  }
 };
 
 updateData("", true);

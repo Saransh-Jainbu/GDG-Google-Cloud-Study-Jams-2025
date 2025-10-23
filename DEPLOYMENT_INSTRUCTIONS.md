@@ -32,7 +32,7 @@ If you just want to deploy the frontend without the refresh functionality:
    - Click "New +" → "Web Service"
    - Connect your GitHub repository
    - Configure:
-     - **Name**: `gdsc-tracker-backend`
+     - **Name**: `gdg-tracker-backend`
      - **Language**: Python 3
      - **Build Command**: `pip install -r conversion/requirements.txt`
      - **Start Command**: `cd conversion && gunicorn --bind 0.0.0.0:$PORT refresh_server_production:app`
@@ -58,11 +58,11 @@ If you just want to deploy the frontend without the refresh functionality:
    - Click "New +" → "Static Site"
    - Connect the same GitHub repository
    - Configure:
-     - **Name**: `gdsc-tracker-frontend`
+     - **Name**: `gdg-tracker-frontend`
      - **Branch**: `main`
      - **Publish Directory**: `main`
 
-✅ **Your frontend will be live at**: `https://gdsc-tracker-frontend.onrender.com`
+✅ **Your frontend will be live at**: `https://gdg-tracker-frontend.onrender.com`
 
 ## 🔧 Configuration Files Created
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data.json Test</title>
+</head>
+<body>
+    <h1>Testing data.json Access</h1>
+    <div id="result"></div>
+    
+    <script>
+        async function testDataAccess() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                resultDiv.innerHTML = 'Testing data.json access...';
+                
+                const response = await fetch('./data.json');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h2 style="color: green;">✅ SUCCESS!</h2>
+                    <p><strong>Records found:</strong> ${data.length}</p>
+                    <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>First record:</strong></p>
+                    <pre style="background: #f5f5f5; padding: 10px; font-size: 12px;">
+${JSON.stringify(data[0], null, 2)}
+                    </pre>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h2 style="color: red;">❌ ERROR!</h2>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul>
+                        <li>data.json file not deployed correctly</li>
+                        <li>File is in wrong directory</li>
+                        <li>Network/CORS issues</li>
+                        <li>Server configuration problems</li>
+                    </ul>
+                    <p><strong>Next steps:</strong></p>
+                    <ol>
+                        <li>Check if you can access: <a href="./data.json" target="_blank">./data.json</a></li>
+                        <li>Verify publish directory is set to 'main' in Render</li>
+                        <li>Check Render deploy logs for errors</li>
+                    </ol>
+                `;
+            }
+        }
+        
+        // Run test when page loads
+        testDataAccess();
+    </script>
+</body>
+</html>
