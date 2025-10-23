@@ -7,9 +7,8 @@ const CONFIG = {
       return 'http://localhost:5001';
     }
     
-    // For production, you'll need to update this with your actual Render backend URL
-    // Replace 'your-backend-name' with the actual name you gave your backend service
-    return 'https://gdsc-tracker-backend.onrender.com';
+    // For production, use your actual Render backend URL
+    return 'https://gdg-tracker-backend.onrender.com';
     
     // Alternative: if you deploy frontend and backend together, you can use relative URLs
     // return ''; // This would use the same domain

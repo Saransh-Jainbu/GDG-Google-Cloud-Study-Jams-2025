@@ -39,12 +39,12 @@ If you just want to deploy the frontend without the refresh functionality:
      - **Plan**: Free
 
 2. **Note the Backend URL**:
-   - After deployment, copy the URL (e.g., `https://gdsc-tracker-backend.onrender.com`)
+   - After deployment, copy the URL (e.g., `https://gdg-tracker-backend.onrender.com`)
 
 #### Step 2: Update Frontend Configuration
 1. **Update Backend URL**:
    - Open `main/config.js`
-   - Replace `'https://gdsc-tracker-backend.onrender.com'` with your actual backend URL
+   - Replace `'https://gdg-tracker-backend.onrender.com'` with your actual backend URL
 
 2. **Commit Changes**:
    ```bash
