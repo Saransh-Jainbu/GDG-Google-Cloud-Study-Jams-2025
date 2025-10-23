@@ -45,9 +45,11 @@ const updateData = async (filter, flag, bustCache = false) => {
       // Local development - use local data.json
       dataUrl = `./data.json${cacheBuster}`;
     } else {
-      // Production - use backend data endpoint
-      const backendUrl = window.CONFIG ? window.CONFIG.getBackendUrl() : 'https://gdg-tracker-backend.onrender.com';
-      dataUrl = `${backendUrl}/data${cacheBuster}`;
+      // Production - temporarily use static data.json until backend is deployed
+      dataUrl = `./data.json${cacheBuster}`;
+      // TODO: Change back to backend after deployment:
+      // const backendUrl = window.CONFIG ? window.CONFIG.getBackendUrl() : 'https://gdg-tracker-backend.onrender.com';
+      // dataUrl = `${backendUrl}/data${cacheBuster}`;
     }
     
     console.log('Fetching data from:', dataUrl);
