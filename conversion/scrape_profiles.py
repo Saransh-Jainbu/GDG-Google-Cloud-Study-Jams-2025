@@ -73,7 +73,7 @@ def extract_badges_from_html(text):
 
         if title:
             # normalize badge name and attach [Skill Badge] for compatibility with existing data
-            bnorm = re.sub('\s+', ' ', title).strip()
+            bnorm = re.sub(r'\s+', ' ', title).strip()
             if earned:
                 # Optionally include earned date in parentheses to preserve that info
                 bnorm = f"{bnorm} [Skill Badge]"
@@ -103,7 +103,7 @@ def extract_badges_from_html(text):
             href = el.get('href', '') if el.name == 'a' else ''
             # Accept if it explicitly looks like a skill badge: contains '[Skill Badge]' or 'skill badge' or the anchor points to a badge-like path
             if '[Skill Badge]' in txt or 'skill badge' in txt.lower() or '/badges' in href or '/quests' in href or '/skill' in href:
-                bnorm = re.sub('\s+', ' ', txt).strip()
+                bnorm = re.sub(r'\s+', ' ', txt).strip()
                 if bnorm and bnorm not in seen:
                     seen.add(bnorm)
                     badges.append(bnorm)
@@ -117,7 +117,7 @@ def extract_badges_from_html(text):
         if is_negative_phrase(txt):
             continue
         if '/badges' in href or 'badge' in href.lower() or '/quests' in href:
-            bnorm = re.sub('\s+', ' ', txt).strip()
+            bnorm = re.sub(r'\s+', ' ', txt).strip()
             if bnorm and bnorm not in seen:
                 seen.add(bnorm)
                 badges.append(bnorm)

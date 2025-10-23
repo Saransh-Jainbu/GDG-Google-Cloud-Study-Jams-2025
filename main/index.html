@@ -1,155 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <!-- Primary Meta Tags -->
+    <title>GDG Bennett University</title>
 
-<head>
-  <!-- Primary Meta Tags -->
-  <title>GDG Bennett University</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="assets/gdscfavi.png" />
+    <script
+      src="https://kit.fontawesome.com/0b6732735e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="shortcut icon" type="image/x-icon" href="assets/gdscfavi.png" />
-  <script src="https://kit.fontawesome.com/0b6732735e.js" crossorigin="anonymous"></script>
-</head>
+  <body>
+    <header>
+      <div class="logo">
+        <a
+          href="https://gdg.community.dev/gdg-on-campus-bennett-university-greater-noida-india/"
+        >
+          <img src="assets/gdg_bennett.png" alt="GDG Bennett logo" />
+        </a>
+      </div>
+    </header>
 
-<body>
-  <header>
-    <div class="logo">
-      <a href="https://gdg.community.dev/gdg-on-campus-bennett-university-greater-noida-india/">
-        <img src="assets/gdg_bennett.png" alt="GDG Bennett logo" />
+    <nav>
+      <a
+        href="https://gdg.community.dev/gdg-on-campus-bennett-university-greater-noida-india/"
+        target="_blank"
+        role="button"
+        >Join GDG Community</a
+      >
+      <a
+        href="https://www.linkedin.com/company/gdg-bu/"
+        target="_blank"
+        role="button"
+      >
+        <i class="fab fa-linkedin"></i> LinkedIn
       </a>
-    </div>
-  </header>
+      <a
+        href="https://www.instagram.com/gdgbu_/"
+        target="_blank"
+        role="button"
+      >
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="https://twitter.com/Gdsc_bennett" target="_blank" role="button">
+        <i class="fab fa-twitter"></i> Twitter
+      </a>
+    </nav>
 
-  <nav>
-    <a href="https://gdg.community.dev/gdg-on-campus-bennett-university-greater-noida-india/" target="_blank" href="#!"
-      role="button"> Join GDG Community</a>
-    <a href="https://www.linkedin.com/company/gdsc-bennett/" target="_blank" href="" role="button"><i
-        class="fab fa-linkedin"></i> Linkedin</a>
-    <a href="https://twitter.com/Gdsc_bennett" target="_blank" href="#!" role="button"><i class="fab fa-twitter"></i>
-      Twitter</a>
-    <a href="https://discord.gg/ZQp3jqWD75" target="_blank" href="#!" role="button"><i class="fab fa-discord"></i>
-      Discord</a>
-    <a href="https://chat.whatsapp.com/Chrlo3k9eyC9uhI5Sgl940" target="_blank" href="#!" role="button"><i
-        class="fab fa-whatsapp"></i> WhatsApp</a>
-  </nav>
+    <div class="main-content">
+      <div class="GCSJ-title">
+        <img src="assets/cloudLg.png" alt="cloud logo" />
+        <div class="GCSJ-text">
+          <h4>GDG</h4>
+          <h4>Cloud</h4>
+          <h4>Study</h4>
+          <h4>Jams</h4>
+          <h4>2025</h4>
+        </div>
+      </div>
 
-  <div class="main-content">
-    <div class="GCSJ-title">
-      <img src="assets/cloudLg.png" alt="cloud logo" />
-      <div class="GCSJ-text">
-        <h4>GDG</h4>
-        <h4>Cloud</h4>
-        <h4>Study</h4>
-        <h4>Jams</h4>
-        <h4>2025</h4>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass icon"></i>
+        <input
+          id="input"
+          class="input-box"
+          type="search"
+          placeholder="Search your name"
+        />
+        <select
+          id="sort-select"
+          title="Sort table"
+          style="margin-left: 12px; padding: 6px; border-radius: 6px"
+        >
+          <option value="courses">Sort: Total Completion</option>
+          <option value="totalBadges">
+            Sort: Total Badges (skill + arcade)
+          </option>
+          <option value="skill">Sort: # Skill Badges</option>
+          <option value="arcade">Sort: # Arcade Games</option>
+        </select>
+        <button
+          id="refresh-btn"
+          style="
+            margin-left: 12px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+          "
+        >
+          <i class="fa-solid fa-sync"></i> Refresh Data
+        </button>
+        <span
+          id="refresh-status"
+          style="margin-left: 8px; font-size: 14px"
+        ></span>
+      </div>
+
+      <div class="alert-slider">
+        <marquee id="last-update-text">Loading last update time...</marquee>
+      </div>
+
+      <div class="progress-box">
+        <h6>
+          Milestones: 1) 50 completions • 2) 75 completions • 3) 100 completions
+          — Completion requires 19 skill badges + at least 1 arcade game 🔒
+        </h6>
+        <div class="progress">
+          <div class="progress-bar"></div>
+        </div>
+        <div
+          style="
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div id="milestone-label">Active milestone: 50</div>
+          <div id="milestone-status"></div>
+        </div>
+        <div class="progress-bar-details">
+          <div class="progress-label left"></div>
+          <div class="progress-label right"></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="table-box sortable">
+          <thead>
+            <tr>
+              <th scope="col"><b>Sr. No.</b></th>
+              <th scope="col"><b>Name</b></th>
+              <th scope="col"><b>Access Code Redemption Status</b></th>
+              <th scope="col"><b>All Skill Badges &amp; Games Completed</b></th>
+              <th scope="col"><b># of Skill Badges Completed</b></th>
+              <th scope="col"><b>Names of Completed Skill Badges</b></th>
+              <th scope="col"><b># of Arcade Games Completed</b></th>
+              <th scope="col"><b>Names of Completed Arcade Games</b></th>
+              <th scope="col"><b>Gen AI Arcade Game</b></th>
+              <th scope="col"><b>Total Completion</b></th>
+            </tr>
+          </thead>
+          <tbody id="gccp_body"></tbody>
+        </table>
       </div>
     </div>
 
-    <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass icon"></i>
-      <input id="input" class="input-box" type="search" placeholder="Search your name" />
-      <select id="sort-select" title="Sort table" style="margin-left:12px; padding:6px; border-radius:6px;">
-        <option value="courses">Sort: Total Completion</option>
-        <option value="totalBadges">Sort: Total Badges (skill + arcade)</option>
-        <option value="skill">Sort: # Skill Badges</option>
-        <option value="arcade">Sort: # Arcade Games</option>
-      </select>
-      <button id="refresh-btn" style="margin-left:12px; padding:6px 16px; border-radius:6px; background:#4285f4; color:white; border:none; cursor:pointer; font-weight:500;">
-        <i class="fa-solid fa-sync"></i> Refresh Data
-      </button>
-      <span id="refresh-status" style="margin-left:8px; font-size:14px;"></span>
-    </div>
-
-    <div class="alert-slider">
-      <marquee id="last-update-text">Loading last update time...</marquee>
-    </div>
-
-    <div class="progress-box">
-      <h6>
-        Milestones: 1) 50 completions • 2) 75 completions • 3) 100 completions — Completion requires 19 skill badges + at least 1 arcade game 🔒
-      </h6>
-      <div class="progress">
-        <div class="progress-bar"></div>
+    <footer class="footer-distributed">
+      <div class="footer-left">
+        <img src="assets/gdscfavi.png" />
+        <h3><span> GDG Bennett University </span></h3>
       </div>
-      <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
-        <div id="milestone-label">Active milestone: 50</div>
-        <div id="milestone-status"></div>
+
+      <div class="footer-center">
+        <div class="college-address">
+          <i class="fa fa-location-dot"></i>
+          <p>
+            <a href="https://www.bennett.edu.in/">Bennett University</a>
+          </p>
+        </div>
+
+        <div class="gdsc-mail">
+          <i class="fa fa-envelope"></i>
+          <p><a href="mailto:gdsc@bennett.edu.in">@GDG Bennett</a></p>
+        </div>
       </div>
-      <div class="progress-bar-details">
-        <div class="progress-label left"></div>
-        <div class="progress-label right"></div>
-      </div>
-    </div>
-
-    <div class="table-card">
-      <table class="table-box sortable">
-        <thead>
-          <tr>
-            <th scope="col"><b>Sr. No.</b></th>
-            <th scope="col"><b>Name</b></th>
-            <th scope="col"><b>Access Code Redemption Status</b></th>
-            <th scope="col"><b>All Skill Badges &amp; Games Completed</b></th>
-            <th scope="col"><b># of Skill Badges Completed</b></th>
-            <th scope="col"><b>Names of Completed Skill Badges</b></th>
-            <th scope="col"><b># of Arcade Games Completed</b></th>
-            <th scope="col"><b>Names of Completed Arcade Games</b></th>
-            <th scope="col"><b>Gen AI Arcade Game</b></th>
-            <th scope="col"><b>Total Completion</b></th>
-          </tr>
-        </thead>
-        <tbody id="gccp_body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer class="footer-distributed">
-    <div class="footer-left">
-      <img src="assets/gdscfavi.png" />
-      <h3><span> GDG Bennett University </span></h3>
-    </div>
-
-    <div class="footer-center">
-      <div class="college-address">
-        <i class="fa fa-location-dot"></i>
-        <p>
-          <a href="https://www.bennett.edu.in/">Bennett University</a>
+      <div class="footer-right">
+        <p class="footer-company-about">
+          <span>About the Community</span>
+          Welcome to GDG, where we empower tomorrow's innovators! We're a
+          passionate tech community committed to learning, collaborating, and
+          driving positive change. Join us in exploring technology, honing
+          skills, and making a real impact on campus and beyond. Be part of our
+          dynamic GDG family today!
         </p>
+        <div class="footer-icons">
+          <a
+            href="https://www.linkedin.com/company/gdg-bu/"
+            target="_blank"
+            role="button"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/gdg_bu/"
+            target="_blank"
+            role="button"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://twitter.com/Gdsc_bu"
+            target="_blank"
+            href="#!"
+            role="button"
+            ><i class="fab fa-twitter"></i
+          ></a>
+        </div>
       </div>
-
-      <div class="gdsc-mail">
-        <i class="fa fa-envelope"></i>
-        <p><a href="mailto:gdsc@bennett.edu.in">@GDG Bennett</a></p>
-      </div>
-    </div>
-    <div class="footer-right">
-      <p class="footer-company-about">
-        
-        <span>About the Community</span>
-        Welcome to GDG, where we empower tomorrow's innovators! We're a
-        passionate tech community committed to learning, collaborating, and
-        driving positive change. Join us in exploring technology, honing
-        skills, and making a real impact on campus and beyond. Be part of our
-        dynamic GDG family today!
-      </p>
-      <div class="footer-icons">
-    <a href="https://twitter.com/Gdsc_bennett" target="_blank" href="#!" role="button"><i
-      class="fab fa-twitter"></i></a>
-        <a href="https://discord.gg/ZQp3jqWD75" target="_blank" href="#!" role="button"><i
-            class="fab fa-discord"></i></a>
-    <a href="https://www.linkedin.com/company/gdsc-bennett/" target="_blank" href="" role="button"><i
-      class="fab fa-linkedin"></i></a>
-      </div>
-    </div>
-  </footer>
-  <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-  <script src="script.js"></script>
-  <script src="script2.js"></script>
-</body>
-
+    </footer>
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
+  </body>
 </html>
