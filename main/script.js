@@ -39,8 +39,19 @@ const updateData = async (filter, flag, bustCache = false) => {
     // Add cache-busting parameter if needed
     const cacheBuster = bustCache ? `?t=${Date.now()}` : '';
     
-    console.log('Fetching data from:', `./data.json${cacheBuster}`);
-    const response = await fetch(`./data.json${cacheBuster}`);
+    // Determine data source based on environment
+    let dataUrl;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      // Local development - use local data.json
+      dataUrl = `./data.json${cacheBuster}`;
+    } else {
+      // Production - use backend data endpoint
+      const backendUrl = window.CONFIG ? window.CONFIG.getBackendUrl() : 'https://gdg-tracker-backend.onrender.com';
+      dataUrl = `${backendUrl}/data${cacheBuster}`;
+    }
+    
+    console.log('Fetching data from:', dataUrl);
+    const response = await fetch(dataUrl);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

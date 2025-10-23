@@ -8,6 +8,7 @@ from flask_cors import CORS
 import subprocess
 import sys
 import os
+import json
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all origins (you may want to restrict this in production)
@@ -50,6 +51,24 @@ def health():
     """Health check endpoint"""
     return jsonify({'status': 'ok'})
 
+@app.route('/data', methods=['GET'])
+def get_data():
+    """Serve the data.json file"""
+    try:
+        # Get the path to data.json
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        data_path = os.path.join(os.path.dirname(script_dir), 'main', 'data.json')
+        
+        # Read and return the data
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({'error': 'Data file not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/', methods=['GET'])
 def index():
     """Root endpoint"""
@@ -58,7 +77,8 @@ def index():
         'status': 'running',
         'endpoints': {
             'refresh': '/refresh (POST)',
-            'health': '/health (GET)'
+            'health': '/health (GET)',
+            'data': '/data (GET)'
         }
     })
 
