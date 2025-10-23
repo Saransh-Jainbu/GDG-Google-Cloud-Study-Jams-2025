@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: gdsc-tracker-backend
+    runtime: python3
+    buildCommand: pip install -r conversion/requirements.txt
+    startCommand: cd conversion && python refresh_server.py
+    plan: free
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    
+  - type: web
+    name: gdsc-tracker-frontend
+    runtime: static
+    buildCommand: echo "No build needed for static site"
+    staticPublishPath: ./main
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

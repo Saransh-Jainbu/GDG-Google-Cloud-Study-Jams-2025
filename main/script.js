@@ -208,7 +208,8 @@ if (refreshBtn && refreshStatus && refreshIcon && refreshText) {
     refreshStatus.style.color = '#4285f4';
     
     try {
-      const response = await fetch('http://localhost:5001/refresh', {
+      const backendUrl = window.CONFIG.getBackendUrl();
+      const response = await fetch(`${backendUrl}/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -252,7 +253,7 @@ if (refreshBtn && refreshStatus && refreshIcon && refreshText) {
         }, 5000);
       }
     } catch (error) {
-      refreshStatus.innerHTML = '<div class="slide-in">❌ Could not connect to refresh server. Make sure it\'s running on port 5001!</div>';
+      refreshStatus.innerHTML = '<div class="slide-in">❌ Could not connect to refresh server. Make sure the backend service is running!</div>';
       refreshStatus.style.color = '#db4437';
       console.error('Refresh error:', error);
       
