@@ -63,11 +63,15 @@ def index():
     })
 
 if __name__ == '__main__':
+    # For production deployment with Gunicorn, this block won't run
+    # Gunicorn will import the 'app' object directly
+    
     # Get port from environment variable (Render sets this)
     port = int(os.environ.get('PORT', 5001))
     # Bind to 0.0.0.0 for Render deployment
     host = '0.0.0.0'
     
     print(f"Starting refresh server on {host}:{port}")
-    print("Server ready for production deployment!")
+    print("Note: For production, use 'gunicorn' instead of the Flask dev server")
+    print("Starting Flask development server...")
     app.run(host=host, port=port, debug=False)

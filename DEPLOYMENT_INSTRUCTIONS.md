@@ -35,7 +35,7 @@ If you just want to deploy the frontend without the refresh functionality:
      - **Name**: `gdsc-tracker-backend`
      - **Language**: Python 3
      - **Build Command**: `pip install -r conversion/requirements.txt`
-     - **Start Command**: `cd conversion && python refresh_server_production.py`
+     - **Start Command**: `cd conversion && gunicorn --bind 0.0.0.0:$PORT refresh_server_production:app`
      - **Plan**: Free
 
 2. **Note the Backend URL**:
@@ -123,6 +123,25 @@ After deployment:
 - **Environment Variables**: Store sensitive data in Render's environment variables
 - **Branch Deployments**: Set up separate deployments for different branches
 - **Monitoring**: Use Render's built-in monitoring or external services
+
+## ⚠️ Production Server Warning
+
+If you see this warning:
+```
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+```
+
+**Don't worry!** This has been fixed in the updated configuration:
+
+✅ **Solution Applied**: 
+- Added `gunicorn` to `requirements.txt` (production WSGI server)
+- Updated start command to use Gunicorn instead of Flask's dev server
+- The warning will not appear when deploying with the provided configuration
+
+**What this means**:
+- Flask's built-in server is only for development/testing
+- Gunicorn is a production-ready WSGI server that handles multiple requests efficiently
+- Your deployment will use Gunicorn automatically with the provided configuration
 
 ---
 
