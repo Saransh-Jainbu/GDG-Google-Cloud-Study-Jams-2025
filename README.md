@@ -3,7 +3,7 @@
 [![Website](https://img.shields.io/website?url=https://cloud-student-tracker.web.app/)](https://genai-student-tracker.web.app/)
 
 
-> A powerful web application for tracking and managing student data for the Google Cloud Study Jams 2023 [Cohort-1].
+> A powerful web application for tracking and managing student data for the GDG Cloud Study Jams 2025 cohort.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@
 
 ## About
 
-The Cloud Student Tracker is a modern and efficient web application designed to simplify student data management and tracking course completions for students enrolled in Google Cloud Study Jams for 2023-24. It provides a seamless and secure way to store and access student information in json format.
+The Cloud Student Tracker is a modern and efficient web application designed to simplify student data management and tracking course completions for students participating in the GDG Cloud Study Jams 2025. It provides a seamless and secure way to store and access student information in json format.
 
 ## Features
 
@@ -37,4 +37,5 @@ To get started with the Cloud Student Tracker locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   https://github.com/Chitresh-code/GDSC-GNIOT-Completion-Tracker.git
+   https://github.com/Bennett-code/GDSC-GNIOT-Completion-Tracker.git
+```
