@@ -1,12 +1,6 @@
-const progress = document.querySelector(
-  ".progress-box .progress .progress-bar"
-);
-const progressLabelLeft = document.querySelector(
-  ".progress-box .progress-bar-details .left"
-);
-const progressLabelRight = document.querySelector(
-  ".progress-box .progress-bar-details .right"
-);
+const progress = document.querySelector(".progress-bar");
+const progressLabelLeft = document.querySelector(".progress-label.left");
+const progressLabelRight = document.querySelector(".progress-label.right");
 
 // Milestones and current target selection
 const MILESTONES = [50, 75, 100];
@@ -40,18 +34,32 @@ let currentComparator = numericCompareFactory((r) => {
   return s + a;
 });
 
-const updateData = async (filter, flag) => {
-  let data = await (await fetch("./data.json")).json();
+const updateData = async (filter, flag, bustCache = false) => {
+  // Add cache-busting parameter if needed
+  const cacheBuster = bustCache ? `?t=${Date.now()}` : '';
+  let data = await (await fetch(`./data.json${cacheBuster}`)).json();
   
   // Get last modified time from data.json
   try {
-    const response = await fetch("./data.json");
+    const response = await fetch(`./data.json${cacheBuster}`);
     const lastModified = response.headers.get('Last-Modified');
     const lastUpdateEl = document.getElementById('last-update-text');
     
     if (lastModified && lastUpdateEl) {
       const date = new Date(lastModified);
       const formattedDate = date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+      lastUpdateEl.textContent = `📊 Last updated: ${formattedDate} • Click "Refresh Data" to update now!`;
+    } else if (lastUpdateEl) {
+      // Fallback: show current time if Last-Modified header is not available
+      const now = new Date();
+      const formattedDate = now.toLocaleString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -97,8 +105,6 @@ const updateData = async (filter, flag) => {
     const arcadeCount = d['# of Arcade Games Completed'] || 0;
     const arcadeNames = d['Names of Completed Arcade Games'] || '';
 
-    const rowBackgroundColor = allSkill === 'Yes' ? '#9CFF2E' : redemption === 'No' ? '#FF5D5D' : '';
-
     // Determine completion according to new rule: at least 19 skill badges and >=1 arcade game
     const badgesNumeric = parseInt(badgesCount, 10) || 0;
     const arcadeNumeric = parseInt(arcadeCount, 10) || 0;
@@ -108,17 +114,25 @@ const updateData = async (filter, flag) => {
       totalCompletionsYesCount++;
     }
 
-    html += `<tr style="background-color: ${rowBackgroundColor};">
-                  <th>${i + 1}</th>
-                  <td><a href="${d["Google Cloud Skills Boost Profile URL"] || '#'}" target="_blank" style="color:black;">${d["User Name"] || ''}</a></td>
-                  <td>${redemption}</td>
-                  <td>${allSkill}</td>
-                  <td>${badgesCount}</td>
-                  <td>${truncate(badgesNames)}</td>
-                  <td>${arcadeCount}</td>
-                  <td>${truncate(arcadeNames)}</td>
-                  <td>${d["Gen AI Arcade Game Completion"] === "1" ? "💯" : "❌"}</td>
-                  <td>${(parseInt(badgesCount,10)||0) + (parseInt(arcadeCount,10)||0)}</td>
+    // Determine row styling with Tailwind classes
+    let rowClass = 'hover:bg-gray-50 transition-colors';
+    if (allSkill === 'Yes') {
+      rowClass = 'bg-green-100 hover:bg-green-200 transition-colors';
+    } else if (redemption === 'No') {
+      rowClass = 'bg-red-100 hover:bg-red-200 transition-colors';
+    }
+
+    html += `<tr class="${rowClass}">
+                  <td class="px-4 py-3 text-center font-medium text-gray-700">${i + 1}</td>
+                  <td class="px-4 py-3"><a href="${d["Google Cloud Skills Boost Profile URL"] || '#'}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">${d["User Name"] || ''}</a></td>
+                  <td class="px-4 py-3 text-center text-sm">${redemption}</td>
+                  <td class="px-4 py-3 text-center text-sm font-semibold ${allSkill === 'Yes' ? 'text-green-600' : 'text-gray-600'}">${allSkill}</td>
+                  <td class="px-4 py-3 text-center font-semibold text-blue-600">${badgesCount}</td>
+                  <td class="px-4 py-3 text-sm text-gray-600">${truncate(badgesNames)}</td>
+                  <td class="px-4 py-3 text-center font-semibold text-purple-600">${arcadeCount}</td>
+                  <td class="px-4 py-3 text-sm text-gray-600">${truncate(arcadeNames)}</td>
+                  <td class="px-4 py-3 text-center text-xl">${d["Gen AI Arcade Game Completion"] === "1" ? "💯" : "❌"}</td>
+                  <td class="px-4 py-3 text-center font-bold text-lg text-gray-800">${(parseInt(badgesCount,10)||0) + (parseInt(arcadeCount,10)||0)}</td>
     </tr>`;
   });
 
@@ -179,11 +193,18 @@ if (sortSelect) {
 // Refresh button handler
 const refreshBtn = document.getElementById('refresh-btn');
 const refreshStatus = document.getElementById('refresh-status');
+const refreshIcon = document.getElementById('refresh-icon');
+const refreshText = document.getElementById('refresh-text');
 
-if (refreshBtn && refreshStatus) {
+if (refreshBtn && refreshStatus && refreshIcon && refreshText) {
   refreshBtn.addEventListener('click', async () => {
+    // Disable button and show loading state
     refreshBtn.disabled = true;
-    refreshStatus.textContent = '🔄 Refreshing data...';
+    refreshIcon.classList.add('spinner');
+    refreshText.textContent = 'Refreshing...';
+    
+    // Show loading status with animation
+    refreshStatus.innerHTML = '<div class="slide-in pulse">🔄 Fetching latest data from Google Cloud Skills Boost...</div>';
     refreshStatus.style.color = '#4285f4';
     
     try {
@@ -197,40 +218,55 @@ if (refreshBtn && refreshStatus) {
       const result = await response.json();
       
       if (result.success) {
-        refreshStatus.textContent = '✅ Data refreshed successfully!';
+        // Show success message
+        refreshStatus.innerHTML = '<div class="slide-in">✅ Data refreshed successfully! Updating leaderboard...</div>';
         refreshStatus.style.color = '#0f9d58';
         
-        // Reload the data from data.json and update timestamp
+        // Reload the data from data.json with cache-busting
         setTimeout(() => {
-          updateData(input.value, true);
+          // Force fresh fetch with cache-busting
+          updateData(input.value, true, true);
           
-          // Update the last modified timestamp
+          // Update the last modified timestamp with animation
           const lastUpdateEl = document.getElementById('last-update-text');
           if (lastUpdateEl) {
-            const now = new Date();
-            const formattedDate = now.toLocaleString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true
-            });
-            lastUpdateEl.textContent = `📊 Last updated: ${formattedDate} • Click "Refresh Data" to update now!`;
+            lastUpdateEl.classList.add('slide-in');
           }
           
-          refreshStatus.textContent = '';
-        }, 2000);
+          // Show final success message
+          refreshStatus.innerHTML = '<div class="slide-in">🎉 Leaderboard updated with latest data!</div>';
+          refreshStatus.style.color = '#0f9d58';
+          
+          // Clear status after 3 seconds
+          setTimeout(() => {
+            refreshStatus.innerHTML = '';
+          }, 3000);
+        }, 1500);
       } else {
-        refreshStatus.textContent = '❌ Refresh failed: ' + (result.error || 'Unknown error');
+        refreshStatus.innerHTML = `<div class="slide-in">❌ Refresh failed: ${result.error || 'Unknown error'}</div>`;
         refreshStatus.style.color = '#db4437';
+        
+        // Clear error after 5 seconds
+        setTimeout(() => {
+          refreshStatus.innerHTML = '';
+        }, 5000);
       }
     } catch (error) {
-      refreshStatus.textContent = '❌ Could not connect to refresh server. Make sure it\'s running!';
+      refreshStatus.innerHTML = '<div class="slide-in">❌ Could not connect to refresh server. Make sure it\'s running on port 5001!</div>';
       refreshStatus.style.color = '#db4437';
       console.error('Refresh error:', error);
+      
+      // Clear error after 5 seconds
+      setTimeout(() => {
+        refreshStatus.innerHTML = '';
+      }, 5000);
     } finally {
-      refreshBtn.disabled = false;
+      // Re-enable button and restore original state
+      setTimeout(() => {
+        refreshBtn.disabled = false;
+        refreshIcon.classList.remove('spinner');
+        refreshText.textContent = 'Refresh Data';
+      }, 1500);
     }
   });
 }
